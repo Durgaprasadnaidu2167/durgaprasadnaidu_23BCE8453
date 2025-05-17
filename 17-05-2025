@@ -1,0 +1,55 @@
+show databases;
+create database VIT;
+show databases;
+show tables from airport;
+drop database youtube;
+drop database online_fashion;
+create table cse(
+s_id int,s_name varchar(50));
+use VIT;
+select * from cse;
+insert into cse values(101,'siva');
+create table profile(
+Name varchar(20),M_No int,Address varchar(50));
+create table Course(
+c_id int,c_name varchar(30),Prof_name varchar(30));
+insert into Course values(2001,'MAT','KRISHNA'),(2002,'ENG','SANJEEV'),(2003,'DBMS','DALAi'),(2004,'DSA','SAICHANDANA'),(2005,'DESCRTI MATH','KARUNAKAR'),(2006,'STS','SUPRIYA'),(2007,'AIML','SATISH'),(2008,'ML','RAMKUMAR'),(2009,'C','NAGARAJU'),(2010,'PYTHON','RAMKUMAR');
+insert into profile values('PDPN','89843984','AP'),('VAMSI ','675348834' ,'AP ' ),('SUDHEER','548232324729' ,'AP ' ),('RAKESH','98345677398' ,'AP ' ),('AKHIL','9384769533 ',' AP' ),('SIVA','9345693392' ,'AP ' ),('SREEMANTH ','945763784657' ,'AP ' ),('KIRAN ','93456785324' ,' AP' ),('BHANU','923465236' ,' AP' ),('RAMU ','94327554' ,'AP ' ));
+INSERT INTO profile VALUES
+('PDPN', '898', 'AP'),
+('VAMSI', '675', 'AP'),
+('SUDHEER', '548', 'AP'),
+('RAKESH', '983', 'AP'),
+('AKHIL', '938', 'AP'),
+('SIVA', '934', 'AP'),
+('SREEMANTH', '945', 'AP'),
+('KIRAN', '934', 'AP'),
+('BHANU', '923', 'AP'),
+('RAMU', '943', 'AP');
+select * from cse;
+select * from profile;
+select * from Course;
+INSERT INTO cse VALUES
+(101, 'Anusha'),
+(102, 'Vamshi'),
+(103, 'Kiran'),
+(104, 'Sravani'),
+(105, 'Ravi'),
+(106, 'Divya'),
+(107, 'Sandeep'),
+(108, 'Harika'),
+(109, 'Pavan'),
+(110, 'Meghana');
+alter table cse add(
+Dept_name varchar(50)
+);
+Alter table cse drop column Dept_name;
+alter table cse add(
+Dept_name varchar(50) DEFAULT 'CSE'
+);
+
+UPDATE cse SET Dept_name='ECE' Where s_name='Pavan' ;
+UPDATE cse SET Dept_name='ECE' WHERE s_name='Pavan';
+
+UPDATE cse SET Dept_name='ECE' WHERE s_name='Pavan';
+UPDATE cse SET Dept_name='ECE' WHERE s_id=101;

@@ -1,0 +1,80 @@
+show databases;
+use vit;
+show tables;
+select count(department) from worker where department='hr';
+select min(department) from worker;
+select * from worker;
+select min(department) from worker where(select sum(salary) from worker where departmen='HR');
+SELECT department
+FROM worker
+GROUP BY department
+ORDER BY SUM(salary) ASC
+LIMIT 1;
+select sum(salary) from worker where department='HR';
+select sum(salary) from worker where department='Admin';
+select sum(salary) from worker where department='Account';
+
+select department,count(department) from worker 
+group by department having count(department)>1;
+
+select department,count(department) from worker 
+group by department having sum(salary)>100000;
+
+select department,count(department) from worker
+where salary>100000
+group by department;
+
+SELECT department, SUM(salary)
+FROM worker
+GROUP BY department
+ORDER BY SUM(salary) DESC
+LIMIT 1 OFFSET 1;
+
+SELECT department, SUM(salary)
+FROM worker
+GROUP BY department
+ORDER BY SUM(salary) DESC
+LIMIT 1 ;
+
+SELECT department, SUM(salary)
+FROM worker
+GROUP BY department
+ORDER BY SUM(salary) DESC
+LIMIT 1 OFFSET 2;
+
+create table student(
+s_id int,
+s_name varchar(25)
+);
+insert into student values (101,'jayanth'),(102,'karthik'),(103,'Praveen'),(105,'mahesh'),(106,'Arun');
+create table address(
+s_id int,
+s_address varchar(25));
+insert into address values (101,'coimbatore'),(104,'chennai'),(105,'pune');
+select * from student NATURAL JOIN address;
+
+SELECT *
+FROM student
+LEFT JOIN address
+ON student.s_id = address.s_id;
+
+select * from Student cross join address;
+
+select * from Student inner join address ON student.s_id = address.s_id ;
+select * from Student inner join address;
+select * from Student left outer join address;
+
+SELECT salary
+FROM (
+    SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) AS rank
+    FROM worker
+) AS ranked
+WHERE rank = 5;
+
+SELECT DISTINCT salary,First_name,Last_name
+FROM worker w1
+WHERE 4 = (
+    SELECT COUNT(DISTINCT salary)
+    FROM worker w2
+    WHERE w2.salary > w1.salary
+);

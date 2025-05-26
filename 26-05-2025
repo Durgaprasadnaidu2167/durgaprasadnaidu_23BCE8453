@@ -1,0 +1,76 @@
+package curd_operations;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class CURD_Operations {
+
+    public void read_data() {
+        DB_Connection obj_DB_Connection = new DB_Connection();
+        Connection connection = obj_DB_Connection.get_Connection(); 
+        PreparedStatement ps = null;
+
+        try {
+            String query = "SELECT * FROM student";
+            ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                System.out.println("s_id - " + rs.getInt("s_id"));
+                System.out.println("s_name - " + rs.getString("s_name"));
+                System.out.println("-------------");
+            }
+        } catch (Exception e) {
+            System.out.println("Error reading data: " + e);
+        } 
+    }
+
+    public void update_data(int s_id, String s_name, int new_s_id) {
+        DB_Connection obj_DB_Connection = new DB_Connection();
+        Connection connection = obj_DB_Connection.get_Connection(); 
+        PreparedStatement ps = null;
+
+        try {
+            String query = "UPDATE student SET s_id = ?, s_name = ? WHERE s_id = ?";
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, new_s_id);     
+            ps.setString(2, s_name);    
+            ps.setInt(3, s_id);         
+
+            int result = ps.executeUpdate();
+            if (result > 0) {
+                System.out.println("Record updated successfully.");
+            } else {
+                System.out.println("No record found with s_id = " + s_id);
+            }
+        } catch (Exception e) {
+            System.out.println("Error updating data: " + e);
+        } 
+    }
+    
+    public void delete_data(int s_id){
+    	DB_Connection obj_DB_Connection=new DB_Connection();
+    	Connection connection=obj_DB_Connection.get_Connection();
+    	PreparedStatement ps=null;
+    	 try {
+             String query = "DELETE FROM student WHERE s_id = ?";
+             ps = connection.prepareStatement(query);
+             ps.setInt(1, s_id);
+             ps.executeUpdate();
+
+         } catch (Exception e) {
+             System.out.println("Error deleting data: " + e);
+         }
+
+    }
+ 
+    public static void main(String[] args) {
+        CURD_Operations obj = new CURD_Operations();
+        obj.read_data();
+        obj.update_data(102, "karthik", 201);
+        obj.read_data(); 
+        obj.delete_data(106);
+        obj.read_data();
+    }
+}

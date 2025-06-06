@@ -1,0 +1,54 @@
+1. Find the total revenue (price × quantity) for each item, sorted from highest to lowest.
+db.sales.aggregate([{$project:{item:1,revenue:{$multiply:["$price","$quantity"]}}},{$group:{_id: "$item",totalRev:{$sum:"$revenue"}}},{$sort:{totalRev:-1}}])
+
+2. Calculate the total quantity sold per month in 2022.
+db.sales.aggregate([{$match: {date: {$gte: ISODate("2022-01-01"),$lt: ISODate("2023-01-01")}}},{$group: {_id:{month: { $month: "$date" } },totalQuantity: { $sum: "$quantity" }}}])
+
+3. Find all items where price is greater than 10 and size is not 'Short'
+db.sales.aggregate([{$match: {size: { $ne: "Short" } }},{$group: {_id: "$item",calprice: { $sum: "$price" }}},{$match: {calprice: { $gt: 10 }}}])
+
+4. Get all Cappuccino sales with quantity between 10 and 20.
+db.sales.aggregate([{ $match: { item: "Cappuccino", quantity: { $gt: 10, $lt: 20 } } }])
+
+5. Query to find items where the item name starts with "A".
+db.sales.find({item:/^A/})
+
+6. Find all records that do not have the field size.
+db.sales.find({size:{$exists:false}})
+
+7. Find all sales that are either "Grande" or "Tall" but not "Americanos".
+db.sales.find({size:{$in:["Grande","Tall"]},item:{$ne:"Americanos"}})
+
+8.List all items sold in February 2022.
+db.sales.find({date: {$gte: ISODate("2022-02-01"),$lt: ISODate("2022-02-29")}})
+
+9.Find sales where the quantity is more than twice the price.
+db.sales.aggregate([{$match: {$expr: {$gt: ["$quantity", { $multiply: ["$price", 2] }]}}}])
+
+10.Find all sales where the price is greater than the average price of their respective size.
+db.sales.aggregate([{$group:{_id:"$size",avgPrice:{$avg:"$price"}}},{$match:{price:{$gt:"avgPrice"}}}])
+
+
+11. Filter sales where the total revenue is even and exceeds 100.
+db.sales.find({
+  $where: function() {
+    const total = this.price * this.quantity;
+    return total > 100 && total % 2 === 0;
+  }
+})
+
+
+11. Find Sales Where the Day of Week Matches Quantity's Last Digit [Filter sales where the day of the week (0=Sunday, 1=Monday, etc.) matches the last digit of quantity]
+db.sales.find({$where: function () {const day = this.date.getDay();const lastDigit = this.quantity % 10;return day === lastDigit;}})
+
+12. Find Sales Where the Month is Prime and Quantity is Odd
+[Filter sales where the month (1-12) is a prime number (2,3,5,7,11) AND quantity is odd]
+db.sales.aggregate([{$addFields:{month:{$month:"$date"}}},{$match:{month:{$in:[2,3,5,7,11]},quantity:{$mod:[2,1]}}}])
+
+13. Find Sales with "Suspicious Quantities" (Divisible by 5 or 7)
+[Filter sales where quantity is divisible by 5 or 7]
+db.sales.aggregate([{$match:{$or:[{quantity:{$mod:[5,0]}},{quantity:{$mod:[7,0]}}]}}])
+
+
+
+

@@ -1,0 +1,227 @@
+package connection;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
+
+public class MongoDB {
+   public static void main(String[] args) {
+   
+      // Connect to MongoDB server
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+      // Get database
+      MongoDatabase database = mongoClient.getDatabase("monday123");
+
+      // Create collection (this will throw if it already exists)
+      database.createCollection("employeeRecord");
+
+      // Fix: assign collection using '=' not '+'
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+
+      // Create and insert a document
+      Document document = new Document("title", "MongoDB");
+      collection.insertOne(document);
+
+      // Print database names
+      MongoIterable<String> loop1 = mongoClient.listDatabaseNames();
+      for (String name : loop1) {
+         System.out.println(name);
+      }
+
+      mongoClient.close();
+   }
+}
+
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class MongoDB {
+   public static void main(String[] args) {
+      // Creating a Mongo client 
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+      MongoDatabase database = mongoClient.getDatabase("myDb");
+
+      // Get the collection
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+
+      Document document = new Document("First_Name", "Mahesh")
+         .append("Last_Name", "Parashar")
+         .append("Date_Of_Birth", "1990-08-21")
+         .append("e_mail", "mahesh_parashar.123@gmail.com")
+         .append("phone", "9034343345");
+
+      collection.insertOne(document);
+      List<Document> documents = new ArrayList<>();
+
+      documents.add(new Document("First_Name", "Radhika")
+         .append("Last_Name", "Sharma")
+         .append("Date_Of_Birth", "1995-09-26")
+         .append("e_mail", "radhika_sharma.123@gmail.com")
+         .append("phone", "9000012345"));
+
+      documents.add(new Document("First_Name", "Rachel")
+         .append("Last_Name", "Christopher")
+         .append("Date_Of_Birth", "1990-02-16")
+         .append("e_mail", "Rachel_Christopher.123@gmail.com")
+         .append("phone", "9000054321"));
+
+      documents.add(new Document("First_Name", "Fathima")
+         .append("Last_Name", "Sheik")
+         .append("Date_Of_Birth", "1990-02-16")
+         .append("e_mail", "Fathima_Sheik.123@gmail.com")
+         .append("phone", "9000054321"));
+
+      collection.insertMany(documents);
+
+      System.out.println("Documents inserted.");
+   }
+}
+
+package connection;
+
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
+import com.mongodb.client.model.Filters;
+
+public class MongoDB {
+   public static void main(String[] args) {
+   
+      // Connect to MongoDB server
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+      // Get database
+      MongoDatabase database = mongoClient.getDatabase("mydb");
+
+      // Fix: assign collection using '=' not '+'
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+
+      //Find All Documnets
+      FindIterable<Document> allDocuments = collection.find() ;
+      
+      for(Document document:allDocuments) {
+        System.out.println(document);
+      }
+      System.out.println("***Selected Document***");
+      
+      //Select a particular document
+      FindIterable<Document> documents=collection.find(Filters.eq("First_Name","Mahesh"));
+      for(Document document:documents) {
+        System.out.println(document);
+      }
+
+      mongoClient.close();
+   }
+}
+
+
+package connection;
+
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
+public class MongoDB {
+   public static void main(String[] args) {
+   
+      // Connect to MongoDB server
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+      // Get database
+      MongoDatabase database = mongoClient.getDatabase("mydb");
+
+      // Fix: assign collection using '=' not '+'
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+
+      //Find All Documnets
+      collection.updateOne(Filters.eq("First_Name","Mahesh"),
+      Updates.set("e_mail","maheshparashar@gmail.com"));
+      System.out.println("Document Updated.");
+      System.out.println("***updated Document*** ");
+      
+      
+      //Select a particular document
+      FindIterable<Document> documents=collection.find(Filters.eq("First_Name","Mahesh"));
+      for(Document document:documents) {
+        System.out.println(document);
+      }
+
+      mongoClient.close();
+   }
+}
+
+package connection;
+
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+
+public class MongoDB {
+   public static void main(String[] args) {
+   
+      // Connect to MongoDB server
+      MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+      // Get database
+      MongoDatabase database = mongoClient.getDatabase("monday123");
+
+      // Access collection
+      MongoCollection<Document> collection = database.getCollection("sampleCollection");
+
+      // Update all matching documents
+      collection.updateMany(
+         Filters.eq("First_Name", "Mahesh"),
+         Updates.set("e_mail", "maheshparashar@gmail.com")
+      );
+      
+      System.out.println("Documents Updated.");
+      System.out.println("*** Updated Documents ***");
+
+      // Retrieve and print updated documents
+      FindIterable<Document> documents = collection.find(Filters.eq("First_Name", "Mahesh"));
+      for (Document document : documents) {
+         System.out.println(document.toJson());
+      }
+
+      mongoClient.close();
+   }
+}
+
+
+
+
+

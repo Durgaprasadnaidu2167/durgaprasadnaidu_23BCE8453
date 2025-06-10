@@ -1,0 +1,60 @@
+//DELETE ONE
+package connection;
+
+import org.bson.Document;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+
+public class MongoDB {
+    public static void main(String[] args) {
+
+        // Connect to MongoDB server
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+        // Get the "vit" database
+        MongoDatabase database = mongoClient.getDatabase("vit");
+
+        // Access the "products" collection
+        MongoCollection<Document> collection = database.getCollection("products");
+
+        // Delete the document with _id = 1
+        collection.deleteOne(Filters.eq("_id", 1));
+
+        System.out.println("Document deleted.");
+
+        // Try to retrieve it to verify deletion
+        FindIterable<Document> documents = collection.find();
+        
+        for (Document document : documents) {
+            System.out.println(document.toJson());
+        }
+
+        // Close the connection
+        mongoClient.close();
+    }
+}
+
+//DELETE MANY
+//Delete all documents where name is "capacino"
+collection.deleteMany(Filters.eq("item", "Cappuccino"));
+
+//Find Two Document 
+FindIterable<Document> documents = collection.find().limit(2); 
+
+//Find Two Documents But Not First Record
+FindIterable<Document> documents = collection.find().skip(1).limit(2); 
+
+//Find Even Number _id
+FindIterable<Document> documents = collection.find(Filters.mod("_id", 2, 0));
+
+//Sort In Ascening Order
+ FindIterable<Document> documents = collection.find().sort(Sorts.ascending("_id"));
+
+ //Sort In Descendind Order
+ FindIterable<Document> documents = collection.find().sort(Sorts.descending("_id"));
+
+ 

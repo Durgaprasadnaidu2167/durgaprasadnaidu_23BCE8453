@@ -1,0 +1,56 @@
+package connection;
+
+import org.bson.Document;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
+
+public class MongoDB {
+    public static void main(String[] args) {
+
+        // Connect to MongoDB server
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+        // Get the "vit" database
+        MongoDatabase database = mongoClient.getDatabase("vit");
+
+        // Access the "sales" collection
+        MongoCollection<Document> collection = database.getCollection("products");
+
+        // Price Greater Than 700 && Less than 900
+        FindIterable<Document> documents = collection.find(
+        	    new Document("price", new Document("$gte", 700).append("$lte", 900))
+        	);
+
+
+        for (Document document : documents) {
+            System.out.println(document.toJson());
+        }
+
+        // Close the connection
+        mongoClient.close();
+    }
+}
+
+//Price Greater Than 700 && Less than 900
+FindIterable<Document> documents = collection.find(new Document("price", new Document("$gte", 700).append("$lte", 900)));
+
+
+//Average The Price
+AggregateIterable<Document> result = collection.aggregate(Arrays.asList(group(null, avg("averagePrice", "$price"))));
+        
+for (Document doc : result) {System.out.println("Average price: " + doc.getDouble("averagePrice"));}
+
+
+//Max Price Per Item
+ AggregateIterable<Document> result = collection.aggregate(Arrays.asList(group("$item", max("MaxPrice", "$price"))));
+
+for (Document doc : result) {
+Number maxPrice = doc.get("MaxPrice", Number.class);
+System.out.println("Item: " +doc.getString("_id") + ", Max Price: " + maxPrice.doubleValue());}
+
+
